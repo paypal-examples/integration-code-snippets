@@ -25,7 +25,6 @@
                     // optional styling for buttons
                     // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
                     style: {
-                        color: "gold",
                         shape: "rect",
                         height: 40
                     },
@@ -69,7 +68,7 @@
                     }
                 });
 
-                if (paypalButtonsComponent.isEligble()) {
+                if (paypalButtonsComponent.isEligible()) {
                     paypalButtonsComponent
                         .render("#paypal-button-container")
                         .catch((err) => {
@@ -77,6 +76,10 @@
                                 `PayPal Buttons failed to render: ${err}`
                             );
                         });
+                } else {
+                    console.log(
+                        `The ${fundingSource} funding source is ineligible`
+                    );
                 }
             }
         </script>
