@@ -9,46 +9,50 @@
 
 <body>
     <div id="paypal-button-container"></div>
-    <!-- Sample PayPal credentials (client-id) are included -->
+    <!-- Replace "client-id=test" with your PayPal Client ID -->
     <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
 
     <script>
-        // Render the PayPal button into #paypal-button-container
-        paypal
-            .Buttons({
-                style: {
-                    color: "gold",
-                    shape: "rect",
-                    height: 40,
-                },
+        const paypalButtons = paypal.Buttons({
+            // optional styling for buttons
+            style: {
+                color: "gold",
+                shape: "rect",
+                height: 40
+            },
 
-                // Set up the transaction
-                createOrder: function (data, actions) {
-                    return actions.order.create({
-                        purchase_units: [
-                            {
-                                amount: {
-                                    value: "88.44",
-                                },
-                            },
-                        ],
-                    });
-                },
+            // set up the transaction
+            createOrder: function (data, actions) {
+                return actions.order.create({
+                    purchase_units: [
+                        {
+                            amount: {
+                                value: "88.44"
+                            }
+                        }
+                    ]
+                });
+            },
 
-                // Finalize the transaction
-                onApprove: function (data, actions) {
-                    return actions.order.capture().then(function (details) {
-                        // Show a success message to the buyer
-                        alert(
-                            "Transaction completed by " +
-                                details.payer.name.given_name +
-                                "!"
-                        );
-                    });
-                },
-            })
-            .render("#paypal-button-container");
+            // finalize the transaction
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (details) {
+                    const payerName = details.payer.name.given_name;
+                    console.log(`Transaction completed by ${payerName}!`);
+                });
+            },
 
+            // handle unrecoverable errors
+            onError: function (err) {
+                console.error(
+                    `An error has prevented the buyer from checking out with PayPal: ${err}`
+                );
+            }
+        });
+
+        paypalButtons.render("#paypal-button-container").catch(function (err) {
+            console.error(`PayPal Buttons failed to render: ${err}`);
+        });
     </script>
 </body>
 
