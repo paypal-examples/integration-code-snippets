@@ -1,66 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>PayPal Standard Payments Integration | Client Demo</title>
-  </head>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>PayPal Standard Payments Integration | Client Demo</title>
+    </head>
 
-  <body>
-    <div id="paypal-button-container"></div>
-    <!-- Replace "client-id=test" with your PayPal Client ID -->
-    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+    <body>
+        <div id="paypal-button-container"></div>
+        <!-- Replace "client-id=test" with your PayPal Client ID -->
+        <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
 
-    <script>
-      const fundingSources = [
-        paypal.FUNDING.PAYPAL,
-        paypal.FUNDING.CREDIT,
-        paypal.FUNDING.CARD,
-      ];
+        <script>
+            const fundingSources = [
+                paypal.FUNDING.PAYPAL,
+                paypal.FUNDING.CREDIT,
+                paypal.FUNDING.CARD
+            ];
 
-      for (const fundingSource of fundingSources) {
-        const paypalButtonsComponent = paypal.Buttons({
-          fundingSource: fundingSource,
+            for (const fundingSource of fundingSources) {
+                const paypalButtonsComponent = paypal.Buttons({
+                    fundingSource: fundingSource,
 
-          // optional styling for buttons
-          // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
-          style: {
-            shape: "rect",
-            height: 40,
-          },
+                    // optional styling for buttons
+                    // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
+                    style: {
+                        shape: "rect",
+                        height: 40
+                    },
 
-          // set up the recurring transaction
-          createSubscription: (data, actions) => {
-            // replace with your subscription plan id
-            // https://developer.paypal.com/docs/subscriptions/#link-createplan
-            return actions.subscription.create({
-              plan_id: "P-3RX065706M3469222L5IFM4I",
-            });
-          },
+                    // set up the recurring transaction
+                    createSubscription: (data, actions) => {
+                        // replace with your subscription plan id
+                        // https://developer.paypal.com/docs/subscriptions/#link-createplan
+                        return actions.subscription.create({
+                            plan_id: "P-3RX065706M3469222L5IFM4I"
+                        });
+                    },
 
-          // notify the buyer that the subscription is successful
-          onApprove: (data, actions) => {
-            console.log(
-              `You have successfully created subscription ${data.subscriptionID}!`
-            );
-          },
+                    // notify the buyer that the subscription is successful
+                    onApprove: (data, actions) => {
+                        console.log(
+                            `You have successfully created subscription ${data.subscriptionID}!`
+                        );
+                    },
 
-          // handle unrecoverable errors
-          onError: (err) => {
-            console.error(
-              `An error prevented the buyer from checking out with PayPal: ${err}`
-            );
-          },
-        });
+                    // handle unrecoverable errors
+                    onError: (err) => {
+                        console.error(
+                            `An error prevented the buyer from checking out with PayPal: ${err}`
+                        );
+                    }
+                });
 
-        if (paypalButtonsComponent.isEligble()) {
-          paypalButtonsComponent
-            .render("#paypal-button-container")
-            .catch((err) => {
-              console.error(`PayPal Buttons failed to render: ${err}`);
-            });
-        }
-      }
-    </script>
-  </body>
+                if (paypalButtonsComponent.isEligble()) {
+                    paypalButtonsComponent
+                        .render("#paypal-button-container")
+                        .catch((err) => {
+                            console.error(
+                                `PayPal Buttons failed to render: ${err}`
+                            );
+                        });
+                }
+            }
+        </script>
+    </body>
 </html>
