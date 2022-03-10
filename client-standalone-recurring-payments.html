@@ -3,13 +3,15 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>PayPal Standard Payments Integration | Client Demo</title>
+        <title>
+            PayPal Standalone Recurring Payments Integration | Client Demo
+        </title>
     </head>
 
     <body>
-        <div id="paypal-button-container"></div>
+        <div id="paypal-button-container" style="max-width: 500px"></div>
         <!-- Replace "client-id=test" with your PayPal Client ID -->
-        <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+        <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&vault=true&intent=subscription"></script>
 
         <script>
             const fundingSources = [
@@ -26,7 +28,8 @@
                     // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
                     style: {
                         shape: "rect",
-                        height: 40
+                        height: 40,
+                        label: "subscribe"
                     },
 
                     // set up the recurring transaction
@@ -53,7 +56,7 @@
                     }
                 });
 
-                if (paypalButtonsComponent.isEligble()) {
+                if (paypalButtonsComponent.isEligible()) {
                     paypalButtonsComponent
                         .render("#paypal-button-container")
                         .catch((err) => {
